@@ -6,9 +6,10 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 {
     public float speed = 10; 
-    public float rotateSpeed = 150;
+    public float rotateSpeed = 5;
 
     private Rigidbody rb;
+
     private float movementX;
     private float movementY;
 
@@ -25,6 +26,8 @@ public class PlayerController : MonoBehaviour
         movementX = movementVector.x;
         movementY = movementVector.y;
 
+        Debug.Log(movementVector);
+
     }
 
     void OnJump()
@@ -35,11 +38,12 @@ public class PlayerController : MonoBehaviour
     void FixedUpdate()
     {
         // Move the player
-        Vector3 movement = new Vector3(movementX, 0.0f, movementY);
-        rb.MovePosition(rb.transform.position + movement * Time.deltaTime * speed);
+        Vector3 movement = new Vector3(movementX, 0.0f, movementY) * Time.deltaTime * speed; 
+        movement = transform.TransformDirection(movement);
+        rb.MovePosition(transform.position + movement);
 
-        // Rotate the player, needs to change to MoveRotation
-        rb.transform.RotateAround(rb.position, rb.transform.up, movementX * Time.deltaTime * rotateSpeed);
- 
+        // Rotate the player
+        Quaternion deltaRotation = Quaternion.Euler(0.0f, movementX * rotateSpeed, 0.0f);
+        rb.MoveRotation(rb.rotation * deltaRotation);
     }
 }
