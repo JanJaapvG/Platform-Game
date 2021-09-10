@@ -34,8 +34,11 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
+        // Move the player
         Vector3 movement = new Vector3(movementX, 0.0f, movementY);
-        rb.transform.Translate(movement * Time.deltaTime * speed);
+        rb.MovePosition(rb.transform.position + movement * Time.deltaTime * speed);
+
+        // Rotate the player, needs to change to MoveRotation
         rb.transform.RotateAround(rb.position, rb.transform.up, movementX * Time.deltaTime * rotateSpeed);
  
     }
