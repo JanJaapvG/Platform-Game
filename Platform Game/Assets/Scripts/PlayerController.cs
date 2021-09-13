@@ -38,7 +38,7 @@ public class PlayerController : MonoBehaviour
     void FixedUpdate()
     {
         // Move the player
-        Vector3 movement = new Vector3(movementX, 0.0f, movementY) * Time.deltaTime * speed; 
+        Vector3 movement = new Vector3(0.0f, 0.0f, movementY) * Time.deltaTime * speed; 
         movement = transform.TransformDirection(movement);
         rb.MovePosition(transform.position + movement);
 
