@@ -25,7 +25,7 @@ public class PlatformXController : MonoBehaviour
 
     IEnumerator MoveLeft()
     {
-        yield return null;
+        yield return new WaitForSeconds(1f);
 
         while (rb.position.x > -15)
         {
@@ -44,7 +44,7 @@ public class PlatformXController : MonoBehaviour
 
     IEnumerator MoveRight()
     {
-        yield return null;
+        yield return new WaitForSeconds(1f);
 
         while (rb.position.x < 15)
         {

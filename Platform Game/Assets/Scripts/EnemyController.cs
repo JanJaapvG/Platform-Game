@@ -20,12 +20,14 @@ public class EnemyController : MonoBehaviour
 
     IEnumerator Chase()
     {
-        yield return null;
+        yield return new WaitForSeconds(1f);
 
         while (Vector3.Distance(rb.position, target.transform.position) > enemyScript.targetDistance)
         {
-            transform.LookAt(target.transform.position);
-            rb.AddRelativeForce(Vector3.forward * speed, ForceMode.Force);
+            transform.LookAt(target.transform.position); 
+            Vector3 movePosition = Vector3.Lerp(rb.position, target.transform.position, 1f * Time.deltaTime);
+
+            rb.MovePosition(movePosition);
 
             yield return null;
         }

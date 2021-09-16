@@ -18,7 +18,7 @@ public class PlatformYController : MonoBehaviour
 
     IEnumerator MoveUp()
     {
-        yield return null;
+        yield return new WaitForSeconds(1f);
 
         while (rb.position.y < 5)
         {
@@ -37,7 +37,7 @@ public class PlatformYController : MonoBehaviour
 
     IEnumerator MoveDown()
     {
-        yield return null;
+        yield return new WaitForSeconds(1f);
 
         while (rb.position.y > 0)
         {
