@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlatformController : MonoBehaviour
+public class PlatformYController : MonoBehaviour
 {
     private Rigidbody rb;
 
@@ -18,7 +18,9 @@ public class PlatformController : MonoBehaviour
 
     IEnumerator MoveUp()
     {
-        while(rb.position.y < 12)
+        yield return new WaitForSeconds(1f);
+
+        while(rb.position.y < 5)
         {
             rb.MovePosition(rb.position + Vector3.up * Time.deltaTime * speed);
 
