@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
 
     private float movementX;
     private float movementY;
+    private bool grounded;
 
     // Start is called before the first frame update
     void Start()
@@ -32,7 +33,28 @@ public class PlayerController : MonoBehaviour
 
     void OnJump()
     {
-        rb.AddForce(rb.transform.up * 400);
+        checkGround(); 
+
+        if (grounded)
+        {
+            rb.AddForce(rb.transform.up * 400);
+        } else
+        {
+            // do nothing
+        }
+    }
+
+    void checkGround()
+    {
+        RaycastHit groundHit;
+        Ray groundRay = new Ray(rb.position, Vector3.down);
+        if (Physics.Raycast(groundRay, out groundHit, 1.5f))
+        {
+            grounded = true;
+        } else
+        {
+            grounded = false;
+        }
     }
 
     void FixedUpdate()

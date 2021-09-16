@@ -18,9 +18,9 @@ public class PlatformYController : MonoBehaviour
 
     IEnumerator MoveUp()
     {
-        yield return new WaitForSeconds(1f);
+        yield return null;
 
-        while(rb.position.y < 5)
+        while (rb.position.y < 5)
         {
             rb.MovePosition(rb.position + Vector3.up * Time.deltaTime * speed);
 
@@ -37,7 +37,9 @@ public class PlatformYController : MonoBehaviour
 
     IEnumerator MoveDown()
     {
-        while(rb.position.y > 0)
+        yield return null;
+
+        while (rb.position.y > 0)
         {
             rb.MovePosition(rb.position + Vector3.down * Time.deltaTime * speed);
 

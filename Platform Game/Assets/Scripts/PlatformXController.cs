@@ -12,12 +12,11 @@ public class PlatformXController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
 
-        Debug.Log(rb.position.x);
         if (rb.position.x == 15)
         {
             StartCoroutine("MoveLeft");
         }
-        else if (rb.position.x == -15)
+        if (rb.position.x == -15)
         {
             StartCoroutine("MoveRight");
         }
@@ -26,7 +25,7 @@ public class PlatformXController : MonoBehaviour
 
     IEnumerator MoveLeft()
     {
-        yield return new WaitForSeconds(1f);
+        yield return null;
 
         while (rb.position.x > -15)
         {
@@ -35,7 +34,7 @@ public class PlatformXController : MonoBehaviour
             yield return null;
         }
 
-        print("Right");
+        print("I am now Right");
 
         StartCoroutine("MoveRight");
 
@@ -45,7 +44,7 @@ public class PlatformXController : MonoBehaviour
 
     IEnumerator MoveRight()
     {
-        yield return new WaitForSeconds(1f);
+        yield return null;
 
         while (rb.position.x < 15)
         {
@@ -54,7 +53,7 @@ public class PlatformXController : MonoBehaviour
             yield return null;
         }
 
-        print("Left");
+        print("I am now Left");
 
         StartCoroutine("MoveLeft");
 
