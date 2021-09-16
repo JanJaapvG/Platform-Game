@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EnemyController : MonoBehaviour
 {
-    public float speed = 2;
+    public float speed = 1;
 
     private Rigidbody rb;
     public GameObject target;
@@ -25,7 +25,7 @@ public class EnemyController : MonoBehaviour
         while (Vector3.Distance(rb.position, target.transform.position) > enemyScript.targetDistance)
         {
             transform.LookAt(target.transform.position); 
-            Vector3 movePosition = Vector3.Lerp(rb.position, target.transform.position, 1f * Time.deltaTime);
+            Vector3 movePosition = Vector3.Lerp(rb.position, target.transform.position, speed * Time.deltaTime);
 
             rb.MovePosition(movePosition);
 
