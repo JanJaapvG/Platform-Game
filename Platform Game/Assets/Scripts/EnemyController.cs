@@ -34,14 +34,14 @@ public class EnemyController : MonoBehaviour
             yield return null;
         }
 
-        print("In Range");
+        print("Acquired Target Lock On!");
 
-        StartCoroutine("CastGravityField");
+        StartCoroutine("CastGravityInversionField");
 
         yield break;
     }
 
-    IEnumerator CastGravityField()
+    IEnumerator CastGravityInversionField()
     {
         yield return new WaitForSeconds(1f);
 
@@ -49,7 +49,7 @@ public class EnemyController : MonoBehaviour
         {
             if (!gravityField)
             {
-                print("Casting Gravity field");
+                print("Casting Gravity Inversion field!");
 
                 gravityField = true;
 
@@ -64,7 +64,7 @@ public class EnemyController : MonoBehaviour
 
         }
 
-        print("No longer in range");
+        print("No longer in range, proceeding to chase target!");
 
         StartCoroutine("ChaseTarget");
 
