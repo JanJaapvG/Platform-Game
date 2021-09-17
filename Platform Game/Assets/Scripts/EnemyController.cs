@@ -10,15 +10,17 @@ public class EnemyController : MonoBehaviour
     public GameObject target;
     public EnemyScript enemyScript;
 
+    private bool gravityField = false;
+
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody>();
 
-        StartCoroutine("Chase");
+        StartCoroutine("ChaseTarget");
     }
 
-    IEnumerator Chase()
+    IEnumerator ChaseTarget()
     {
         yield return new WaitForSeconds(1f);
 
@@ -34,6 +36,39 @@ public class EnemyController : MonoBehaviour
 
         print("In Range");
 
+        StartCoroutine("CastGravityField");
+
         yield break;
+    }
+
+    IEnumerator CastGravityField()
+    {
+        yield return new WaitForSeconds(1f);
+
+        while (Vector3.Distance(rb.position, target.transform.position) <= enemyScript.targetDistance)
+        {
+            if (!gravityField)
+            {
+                print("Casting Gravity field");
+
+                gravityField = true;
+
+                yield return new WaitForSeconds(3f);
+            }
+            else
+            {
+                gravityField = false;
+            }
+
+            yield return null;
+
+        }
+
+        print("No longer in range");
+
+        StartCoroutine("ChaseTarget");
+
+        yield break;
+
     }
 }
