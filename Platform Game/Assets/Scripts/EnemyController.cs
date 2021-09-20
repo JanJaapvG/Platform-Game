@@ -17,7 +17,25 @@ public class EnemyController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
 
+        StartCoroutine("Wait");
+    }
+
+    IEnumerator Wait()
+    {
+        yield return new WaitForSeconds(1f);
+
+        while (Vector3.Distance(rb.position, target.transform.position) > enemyScript.chasingDistance)
+        {
+            yield return null;
+        }
+
+        print("Target in sight!");
+
         StartCoroutine("ChaseTarget");
+
+        yield break;
+
+
     }
 
     IEnumerator ChaseTarget()
@@ -50,7 +68,7 @@ public class EnemyController : MonoBehaviour
             if (!gravityField)
             {
                 print("Casting Gravity Inversion field!");
-
+                // instantiate gravityfield
                 gravityField = true;
 
                 yield return new WaitForSeconds(3f);

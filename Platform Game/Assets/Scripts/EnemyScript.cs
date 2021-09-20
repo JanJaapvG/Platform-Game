@@ -6,4 +6,5 @@ using UnityEngine;
 public class EnemyScript : ScriptableObject
 {
     public float targetDistance = 15f;
+    public float chasingDistance = 100f;
 }
