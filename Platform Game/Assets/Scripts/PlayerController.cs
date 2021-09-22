@@ -6,9 +6,14 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 {
     public float speed = 10; 
-    public float rotateSpeed = 5;
+    public float rotateSpeed = 3;
+    public float bulletSpeed = 3000;
 
-    private Rigidbody rb;
+    private Rigidbody rb; 
+    public GameObject bullet;
+    public BulletScriptableObject bulletScriptableObject;
+    public Transform bulletSpawnPoint;
+    private GameObject bulletParent;
 
     private float movementX;
     private float movementY;
@@ -18,6 +23,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        bulletParent = GameObject.Find("Bullet Parent");
     }
 
     void OnMove(InputValue movementValue)
@@ -41,6 +47,15 @@ public class PlayerController : MonoBehaviour
         } else
         {
             // do nothing
+        }
+    }
+
+    void OnFire()
+    {
+        if (bulletParent.transform.childCount < bulletScriptableObject.maxBullets)
+        {
+            GameObject bulletinst = Instantiate(bullet, bulletSpawnPoint.position, rb.rotation, bulletParent.transform) as GameObject;
+            bulletinst.GetComponent<Rigidbody>().AddForce(rb.transform.forward * bulletSpeed);
         }
     }
 

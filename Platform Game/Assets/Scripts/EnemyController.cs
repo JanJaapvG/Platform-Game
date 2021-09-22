@@ -5,6 +5,7 @@ using UnityEngine;
 public class EnemyController : MonoBehaviour
 {
     public float speed = 1;
+    public int health = 3;
 
     private Rigidbody rb;
     public GameObject target;
@@ -88,5 +89,25 @@ public class EnemyController : MonoBehaviour
 
         yield break;
 
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Bullet"))
+        {
+            health -= 1;
+
+            Destroy(collision.gameObject);
+            Debug.Log(health);
+            if (health <= 0)
+            {
+                Die();
+            }
+        }
+    }
+
+    private void Die()
+    {
+        Destroy(gameObject);
     }
 }
