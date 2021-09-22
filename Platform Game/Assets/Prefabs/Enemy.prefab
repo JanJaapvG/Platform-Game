@@ -643,3 +643,4 @@ MonoBehaviour:
   health: 3
   target: {fileID: 0}
   enemyScript: {fileID: 0}
+  gravityInversionField: {fileID: 4702099373416720271, guid: b9eb1bedf03a18442b59e1d6376c5748, type: 3}

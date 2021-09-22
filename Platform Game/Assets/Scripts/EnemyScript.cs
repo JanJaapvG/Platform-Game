@@ -7,4 +7,5 @@ public class EnemyScript : ScriptableObject
 {
     public float targetDistance = 15f;
     public float chasingDistance = 100f;
+    public float specialAttackDuration = 3f;
 }

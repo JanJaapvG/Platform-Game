@@ -10,6 +10,9 @@ public class EnemyController : MonoBehaviour
     private Rigidbody rb;
     public GameObject target;
     public EnemyScript enemyScript;
+    public GameObject gravityInversionField;
+    private GameObject gravityInversionFieldParent;
+    private GravityInversionFieldScript gravityInversionFieldScript;
 
     private bool gravityField = false;
 
@@ -17,6 +20,7 @@ public class EnemyController : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        gravityInversionFieldParent = GameObject.Find("Gravity Inversion Field Parent");
 
         StartCoroutine("Wait");
     }
@@ -69,10 +73,12 @@ public class EnemyController : MonoBehaviour
             if (!gravityField)
             {
                 print("Casting Gravity Inversion field!");
-                // instantiate gravityfield
+
+                Instantiate(gravityInversionField, target.transform.position, target.transform.rotation, gravityInversionFieldParent.transform);
+
                 gravityField = true;
 
-                yield return new WaitForSeconds(3f);
+                yield return new WaitForSeconds(enemyScript.specialAttackDuration);
             }
             else
             {

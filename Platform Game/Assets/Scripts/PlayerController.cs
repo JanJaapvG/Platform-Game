@@ -14,6 +14,7 @@ public class PlayerController : MonoBehaviour
     public BulletScriptableObject bulletScriptableObject;
     public Transform bulletSpawnPoint;
     private GameObject bulletParent;
+    public LayerMask ground;
 
     private float movementX;
     private float movementY;
@@ -54,8 +55,8 @@ public class PlayerController : MonoBehaviour
     {
         if (bulletParent.transform.childCount < bulletScriptableObject.maxBullets)
         {
-            GameObject bulletinst = Instantiate(bullet, bulletSpawnPoint.position, rb.rotation, bulletParent.transform) as GameObject;
-            bulletinst.GetComponent<Rigidbody>().AddForce(rb.transform.forward * bulletSpeed);
+            GameObject bulletInstance = Instantiate(bullet, bulletSpawnPoint.position, rb.rotation, bulletParent.transform) as GameObject;
+            bulletInstance.GetComponent<Rigidbody>().AddForce(rb.transform.forward * bulletSpeed);
         }
     }
 
@@ -63,13 +64,7 @@ public class PlayerController : MonoBehaviour
     {
         RaycastHit groundHit;
         Ray groundRay = new Ray(rb.position, Vector3.down);
-        if (Physics.Raycast(groundRay, out groundHit, 1.5f))
-        {
-            grounded = true;
-        } else
-        {
-            grounded = false;
-        }
+        grounded = (Physics.Raycast(groundRay, out groundHit, 2f, ground));
     }
 
     void FixedUpdate()
