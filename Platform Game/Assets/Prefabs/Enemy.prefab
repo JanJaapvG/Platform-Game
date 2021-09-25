@@ -594,7 +594,7 @@ CapsuleCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 0.5
-  m_Height: 2.5
+  m_Height: 2.8
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &617493156140280273
@@ -627,6 +627,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 1
   health: 3
+  floor: 
   target: {fileID: 0}
   enemyScriptableObject: {fileID: 11400000, guid: da52cf207bd818348a6c926a1c0103fb, type: 2}
   gravityInversionField: {fileID: 4702099373416720271, guid: b9eb1bedf03a18442b59e1d6376c5748, type: 3}

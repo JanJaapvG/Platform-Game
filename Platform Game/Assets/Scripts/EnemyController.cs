@@ -94,7 +94,7 @@ public class EnemyController : MonoBehaviour
                 print("Casting Gravity Inversion field!");
                 var targetPos = target.transform.position;
                 transform.LookAt(targetPos);
-                Instantiate(gravityInversionField, new Vector3(targetPos.x, targetPos.y + 3, targetPos.z), target.transform.rotation, gravityInversionFieldParent.transform);
+                Instantiate(gravityInversionField, new Vector3(targetPos.x, rb.position.y + 3, targetPos.z), target.transform.rotation, gravityInversionFieldParent.transform);
 
                 gravityField = true;
 

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,10 +9,11 @@ public class PlayerController : MonoBehaviour
     public float speed = 10; 
     public float rotateSpeed = 3;
     public float bulletSpeed = 3000;
-    public Transform floor;
+    private bool enteredFloor3 = false;
 
     private Rigidbody rb; 
     public GameObject bullet;
+    public Transform floor;
     public GameObject secretFloor;
     public GameObject secretWall;
     public BulletScriptableObject bulletScriptableObject;
@@ -72,19 +74,27 @@ public class PlayerController : MonoBehaviour
     {
         RaycastHit groundHit;
         Ray groundRay = new Ray(rb.position, Vector3.down);
-        grounded = (Physics.Raycast(groundRay, out groundHit, 2f, ground));
-        floor = groundHit.transform;
-
-        Debug.Log(floor);
+        if (Physics.Raycast(groundRay, out groundHit, 2f, ground))
+        {
+            grounded = true;
+            floor = groundHit.transform;
+        }
+        else
+        {
+            grounded = false;
+        }
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.collider.CompareTag("Floor 3"))
+        if (collision.collider.CompareTag("Floor 3") && enteredFloor3 == false)
         {
-            //Instantiate(secretFloor);
-            //Instantiate(secretWall);
+            Instantiate(secretFloor);
+            Instantiate(secretWall);
+
+            enteredFloor3 = true;
         }
+
         CheckGround();
     }
 
