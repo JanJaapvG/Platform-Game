@@ -6,7 +6,7 @@ public class PlatformXController : MonoBehaviour
 {
     private Rigidbody rb;
 
-    public float speed = 25;
+    public float speed = 15;
 
     public void Start()
     {

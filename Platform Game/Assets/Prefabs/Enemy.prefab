@@ -628,5 +628,5 @@ MonoBehaviour:
   speed: 1
   health: 3
   target: {fileID: 0}
-  enemyScript: {fileID: 0}
+  enemyScriptableObject: {fileID: 11400000, guid: da52cf207bd818348a6c926a1c0103fb, type: 2}
   gravityInversionField: {fileID: 4702099373416720271, guid: b9eb1bedf03a18442b59e1d6376c5748, type: 3}

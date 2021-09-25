@@ -6,13 +6,14 @@ public class EnemyController : MonoBehaviour
 {
     public float speed = 1;
     public int health = 3;
+    private string playerFloor;
+    public string floor;
 
     private Rigidbody rb;
-    public GameObject target;
-    public EnemyScript enemyScript;
+    public Transform target;
+    public EnemyScriptableObject enemyScriptableObject;
     public GameObject gravityInversionField;
     private GameObject gravityInversionFieldParent;
-    private GravityInversionFieldScript gravityInversionFieldScript;
 
     private bool gravityField = false;
 
@@ -20,34 +21,52 @@ public class EnemyController : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+
+        target = GameObject.Find("Player").transform;
+        playerFloor = target.GetComponent<PlayerController>().floor.tag;
+
+
         gravityInversionFieldParent = GameObject.Find("Gravity Inversion Field Parent");
 
+        CheckGround();
+
         StartCoroutine("Wait");
+    }
+
+    private void Update()
+    {
+        playerFloor = target.GetComponent<PlayerController>().floor.tag;
+    }
+
+    void CheckGround()
+    {
+        RaycastHit groundHit;
+        Ray groundRay = new Ray(rb.position, Vector3.down);
+        Physics.Raycast(groundRay, out groundHit, 2f);
+        floor = groundHit.transform.tag;
     }
 
     IEnumerator Wait()
     {
         yield return new WaitForSeconds(1f);
 
-        while (Vector3.Distance(rb.position, target.transform.position) > enemyScript.chasingDistance)
-        {
+        while (floor != playerFloor)
+        {   
             yield return null;
         }
-
+        
         print("Target in sight!");
 
         StartCoroutine("ChaseTarget");
 
         yield break;
-
-
     }
 
     IEnumerator ChaseTarget()
     {
         yield return new WaitForSeconds(1f);
 
-        while (Vector3.Distance(rb.position, target.transform.position) > enemyScript.targetDistance)
+        while (Vector3.Distance(rb.position, target.transform.position) >= enemyScriptableObject.targetDistance)
         {
             transform.LookAt(target.transform.position); 
             Vector3 movePosition = Vector3.Lerp(rb.position, target.transform.position, speed * Time.deltaTime);
@@ -68,17 +87,18 @@ public class EnemyController : MonoBehaviour
     {
         yield return new WaitForSeconds(1f);
 
-        while (Vector3.Distance(rb.position, target.transform.position) <= enemyScript.targetDistance)
+        while (Vector3.Distance(rb.position, target.transform.position) <= enemyScriptableObject.targetDistance)
         {
             if (!gravityField)
             {
                 print("Casting Gravity Inversion field!");
-
-                Instantiate(gravityInversionField, target.transform.position, target.transform.rotation, gravityInversionFieldParent.transform);
+                var targetPos = target.transform.position;
+                transform.LookAt(targetPos);
+                Instantiate(gravityInversionField, new Vector3(targetPos.x, targetPos.y + 3, targetPos.z), target.transform.rotation, gravityInversionFieldParent.transform);
 
                 gravityField = true;
 
-                yield return new WaitForSeconds(enemyScript.specialAttackDuration);
+                yield return new WaitForSeconds(enemyScriptableObject.specialAttackDuration);
             }
             else
             {

@@ -5,16 +5,22 @@ using UnityEngine;
 public class GravityInversionFieldScript : MonoBehaviour
 {
 
-    public EnemyScript enemyScript;
-    public float force = 20;
+    public EnemyScriptableObject enemyScriptableObject;
+    public float force = 10;
 
     private void Start()
     {
-        Destroy(gameObject, enemyScript.specialAttackDuration);
+        Destroy(gameObject, enemyScriptableObject.specialAttackDuration);
     }
 
     private void OnTriggerStay(Collider other)
     {
+        other.GetComponent<Rigidbody>().useGravity = false;
         other.GetComponent<Rigidbody>().AddForce(Vector3.up * force, ForceMode.Force);
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        other.GetComponent<Rigidbody>().useGravity = true;
     }
 }

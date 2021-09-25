@@ -432,6 +432,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 6927843163144105043, guid: 60368c03fcc97d74496d9432fa75b86e, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 6927843163144105052, guid: 60368c03fcc97d74496d9432fa75b86e, type: 3}
       propertyPath: m_RootOrder
       value: 3
@@ -1087,10 +1091,10 @@ MonoBehaviour:
   speed: 10
   rotateSpeed: 5
   bulletSpeed: 3000
+  floor: {fileID: 0}
   bullet: {fileID: 4777371763101263502, guid: d1b3321e365f64f4f8a40a629e11c1bd, type: 3}
   bulletScriptableObject: {fileID: 11400000, guid: e8ca0c9498609ad469fd0b38b409daa0, type: 2}
   bulletSpawnPoint: {fileID: 1967348431}
-  floor: {fileID: 0}
   ground:
     serializedVersion: 2
     m_Bits: 8
@@ -1799,7 +1803,7 @@ GameObject:
   - component: {fileID: 872512690}
   m_Layer: 3
   m_Name: Ground Planes Parent
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

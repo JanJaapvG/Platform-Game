@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-[CreateAssetMenu(fileName = "BulletScript", menuName = "PlayerScript/BulletCount")]
+[CreateAssetMenu(fileName = "BulletScriptableObject", menuName = "Player/Bullet")]
 public class BulletScriptableObject : ScriptableObject
 {
     public float maxBullets = 3f;

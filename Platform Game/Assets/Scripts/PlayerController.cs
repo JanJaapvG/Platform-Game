@@ -8,9 +8,12 @@ public class PlayerController : MonoBehaviour
     public float speed = 10; 
     public float rotateSpeed = 3;
     public float bulletSpeed = 3000;
+    public Transform floor;
 
     private Rigidbody rb; 
     public GameObject bullet;
+    public GameObject secretFloor;
+    public GameObject secretWall;
     public BulletScriptableObject bulletScriptableObject;
     public Transform bulletSpawnPoint;
     private GameObject bulletParent;
@@ -20,10 +23,15 @@ public class PlayerController : MonoBehaviour
     private float movementY;
     private bool grounded;
 
+    private void Awake()
+    {
+        rb = GetComponent<Rigidbody>();
+        CheckGround();
+    }
+
     // Start is called before the first frame update
     void Start()
     {
-        rb = GetComponent<Rigidbody>();
         bulletParent = GameObject.Find("Bullet Parent");
     }
 
@@ -40,7 +48,7 @@ public class PlayerController : MonoBehaviour
 
     void OnJump()
     {
-        checkGround(); 
+        CheckGround(); 
 
         if (grounded)
         {
@@ -60,11 +68,24 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void checkGround()
+    void CheckGround()
     {
         RaycastHit groundHit;
         Ray groundRay = new Ray(rb.position, Vector3.down);
         grounded = (Physics.Raycast(groundRay, out groundHit, 2f, ground));
+        floor = groundHit.transform;
+
+        Debug.Log(floor);
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.collider.CompareTag("Floor 3"))
+        {
+            //Instantiate(secretFloor);
+            //Instantiate(secretWall);
+        }
+        CheckGround();
     }
 
     void FixedUpdate()
