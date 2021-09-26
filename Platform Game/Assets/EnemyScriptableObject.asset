@@ -12,6 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02c69d692f37ac446b219c9b6c3eb2e6, type: 3}
   m_Name: EnemyScriptableObject
   m_EditorClassIdentifier: 
-  targetDistance: 15
-  chasingDistance: 50
+  targetDistance: 20
   specialAttackDuration: 3

@@ -34,8 +34,6 @@ public class PlatformXController : MonoBehaviour
             yield return null;
         }
 
-        print("I am now Right");
-
         StartCoroutine("MoveRight");
 
         yield break;
@@ -52,8 +50,6 @@ public class PlatformXController : MonoBehaviour
 
             yield return null;
         }
-
-        print("I am now Left");
 
         StartCoroutine("MoveLeft");
 

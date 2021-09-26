@@ -1,51 +1,44 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class EnemyController : MonoBehaviour
 {
     public float speed = 1;
     public int health = 3;
+    public float force = 200;
+    public float lockOnTime = 0;
     private string playerFloor;
     public string floor;
+    private bool lockedOn = false;
 
     private Rigidbody rb;
     public Transform target;
     public EnemyScriptableObject enemyScriptableObject;
-    public GameObject gravityInversionField;
-    private GameObject gravityInversionFieldParent;
+    public UnityEvent LockedOn;
+    public UnityEvent NotLockedOn;
+    public AudioSource hit;
 
-    private bool gravityField = false;
 
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody>();
 
+        // get the player as target and check what is his current floor
         target = GameObject.Find("Player").transform;
         playerFloor = target.GetComponent<PlayerController>().floor.tag;
 
-
-        gravityInversionFieldParent = GameObject.Find("Gravity Inversion Field Parent");
-
+        hit = GetComponent<AudioSource>();
+      
+        // sets the floor which the enemy is currently on
         CheckGround();
 
         StartCoroutine("Wait");
     }
 
-    private void Update()
-    {
-        playerFloor = target.GetComponent<PlayerController>().floor.tag;
-    }
-
-    void CheckGround()
-    {
-        RaycastHit groundHit;
-        Ray groundRay = new Ray(rb.position, Vector3.down);
-        Physics.Raycast(groundRay, out groundHit, 2f);
-        floor = groundHit.transform.tag;
-    }
-
+    // coroutine that waits untill the target is on the same floor to attack
     IEnumerator Wait()
     {
         yield return new WaitForSeconds(1f);
@@ -62,11 +55,12 @@ public class EnemyController : MonoBehaviour
         yield break;
     }
 
+    // chases the target untill the targetDistance
     IEnumerator ChaseTarget()
     {
         yield return new WaitForSeconds(1f);
 
-        while (Vector3.Distance(rb.position, target.transform.position) >= enemyScriptableObject.targetDistance)
+        while (Vector3.Distance(rb.position, target.position) >= enemyScriptableObject.targetDistance)
         {
             transform.LookAt(target.transform.position); 
             Vector3 movePosition = Vector3.Lerp(rb.position, target.transform.position, speed * Time.deltaTime);
@@ -78,38 +72,30 @@ public class EnemyController : MonoBehaviour
 
         print("Acquired Target Lock On!");
 
-        StartCoroutine("CastGravityInversionField");
+        StartCoroutine("LockOnTarget");
 
         yield break;
     }
 
-    IEnumerator CastGravityInversionField()
+    // publish event that the enemy has a Lock on the location of the target.
+    // after 3 seconds publish an event that the enemy has lost the Lock on the location of the target.
+    IEnumerator LockOnTarget()
     {
-        yield return new WaitForSeconds(1f);
+        transform.LookAt(target.position);
 
-        while (Vector3.Distance(rb.position, target.transform.position) <= enemyScriptableObject.targetDistance)
+        while (lockOnTime <= 3)
         {
-            if (!gravityField)
-            {
-                print("Casting Gravity Inversion field!");
-                var targetPos = target.transform.position;
-                transform.LookAt(targetPos);
-                Instantiate(gravityInversionField, new Vector3(targetPos.x, rb.position.y + 3, targetPos.z), target.transform.rotation, gravityInversionFieldParent.transform);
+            LockOn();
+            lockOnTime += Time.timeScale;
+            rb.AddForce(Vector3.up * force);
 
-                gravityField = true;
-
-                yield return new WaitForSeconds(enemyScriptableObject.specialAttackDuration);
-            }
-            else
-            {
-                gravityField = false;
-            }
-
-            yield return null;
-
+            yield return new WaitForSeconds(1f);
         }
 
-        print("No longer in range, proceeding to chase target!");
+        lockOnTime = 0;
+        LostLockOn();
+
+        print("Lost Target Lock proceeding to chase target!");
 
         StartCoroutine("ChaseTarget");
 
@@ -117,23 +103,100 @@ public class EnemyController : MonoBehaviour
 
     }
 
+
+    // publishes an event that the enemy has is locked on to the targets position
+    void LockOn()
+    {
+        if (!lockedOn)
+        {
+            LockedOn.Invoke();
+            lockedOn = true;
+        }
+    }
+
+    // publishes an event that the enemy has is no longer locked on to the targets position
+    void LostLockOn()
+    {
+        if (lockedOn)
+        {
+            NotLockedOn.Invoke();
+            lockedOn = false;
+        }
+    }
+
+    // update the targets floor every frame
+    // check if this can be done more efficiently later
+    private void Update()
+    {
+        playerFloor = target.GetComponent<PlayerController>().floor.tag;
+    }
+
+    // method to set the floor which the enemy is currently on
+    void CheckGround()
+    {
+        RaycastHit groundHit;
+        Ray groundRay = new Ray(rb.position, Vector3.down);
+        Physics.Raycast(groundRay, out groundHit, 2f);
+        floor = groundHit.transform.tag;
+    }
+
+    // checks if the enemy gets hit by a bullet and will drop it's health by 1
+    // when health is 0, die will be called which destroys the enemy
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Bullet"))
         {
+            hit.Play();
             health -= 1;
 
-            Destroy(collision.gameObject);
-            Debug.Log(health);
+            Destroy(collision.gameObject, 1f);
             if (health <= 0)
             {
+                hit.Play();
                 Die();
             }
         }
     }
 
-    private void Die()
+    // method to destroy the enemy gameobject and publish an event that the enemy has lost it's Lock on the target's position
+    void Die()
     {
+        LostLockOn();
+        lockedOn = false;
+
         Destroy(gameObject);
     }
+
+    //The old method for using the special attack
+    //IEnumerator CastSpecialAttack()
+    //{
+    //    while (Vector3.Distance(rb.position, target.position) =< enemyScriptableObject.targetDistance)
+    //    {
+    //        if (!gravityField)
+    //        {
+    //            print("Casting Gravity Inversion field!");
+
+    //            CastGravityInversionField();
+
+    //            yield return new WaitForSeconds(enemyScriptableObject.specialAttackDuration);
+    //        }
+    //        else
+    //        {
+    //            gravityField = false;
+    //        }
+    //        print("Lost Target Lock proceeding to chase target!");
+
+    //        StartCoroutine("ChaseTarget");
+    //        yield break;
+    //    }
+    //}
+
+    //void CastGravityInversionField()
+    //{
+    //    var targetPos = target.transform.position;
+    //    transform.LookAt(targetPos);
+    //    Instantiate(gravityInversionField, new Vector3(targetPos.x, rb.position.y + 3, targetPos.z), target.transform.rotation, gravityInversionFieldParent.transform);
+
+    //    gravityField = true;
+    //}
 }

@@ -17,8 +17,6 @@ public class PlatformYController : MonoBehaviour
         startingPos = rb.position;
         targetPos = rb.position + new Vector3(0.0f, 5f, 0.0f);
 
-        Debug.Log(targetPos);
-
         StartCoroutine("MoveUp");
     }
 
@@ -33,8 +31,6 @@ public class PlatformYController : MonoBehaviour
 
             yield return null;
         }
-
-        print("Reached the platform");
 
         StartCoroutine("MoveDown");
 
@@ -52,8 +48,6 @@ public class PlatformYController : MonoBehaviour
 
             yield return null;
         }
-
-        print("Reached the floor");
 
         StartCoroutine("MoveUp");
 

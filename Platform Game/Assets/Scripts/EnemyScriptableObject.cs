@@ -6,5 +6,5 @@ using UnityEngine;
 public class EnemyScriptableObject : ScriptableObject
 {
     public float targetDistance = 15f;
-    public float specialAttackDuration = 3f;
+    public int specialAttackDuration = 3;
 }

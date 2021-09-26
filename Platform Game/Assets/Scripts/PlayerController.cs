@@ -10,20 +10,20 @@ public class PlayerController : MonoBehaviour
     public float rotateSpeed = 3;
     public float bulletSpeed = 3000;
     private bool enteredFloor3 = false;
+    private float movementX;
+    private float movementY;
+    private bool grounded;
+    private bool aiming = false;
 
     private Rigidbody rb; 
     public GameObject bullet;
     public Transform floor;
-    public GameObject secretFloor;
-    public GameObject secretWall;
-    public BulletScriptableObject bulletScriptableObject;
     public Transform bulletSpawnPoint;
     private GameObject bulletParent;
+    public BulletScriptableObject bulletScriptableObject;
     public LayerMask ground;
-
-    private float movementX;
-    private float movementY;
-    private bool grounded;
+    public GameObject secretFloor;
+    public GameObject secretWall;
 
     private void Awake()
     {
@@ -34,9 +34,11 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //Empty opbject to collect all bullets
         bulletParent = GameObject.Find("Bullet Parent");
     }
 
+    // method to move the player
     void OnMove(InputValue movementValue)
     {
         Vector2 movementVector = movementValue.Get<Vector2>();
@@ -44,23 +46,37 @@ public class PlayerController : MonoBehaviour
         movementX = movementVector.x;
         movementY = movementVector.y;
 
-        Debug.Log(movementVector);
-
     }
 
+    // allows the player to aim better with lower rotation speed when pressing shift
+    void OnAim()
+    {
+        if (!aiming)
+        {
+            rotateSpeed = 1;
+            aiming = true;
+        } else if (aiming)
+        {
+            rotateSpeed = 3;
+            aiming = false;
+        }
+    }
+
+    // method to jump if the player is on the ground
     void OnJump()
     {
         CheckGround(); 
 
         if (grounded)
         {
-            rb.AddForce(rb.transform.up * 400);
+            rb.AddForce(Vector3.up * 400);
         } else
         {
-            // do nothing
+            print("Can't jump when airborne");
         }
     }
 
+    // method to fire bullets at enemy's
     void OnFire()
     {
         if (bulletParent.transform.childCount < bulletScriptableObject.maxBullets)
@@ -70,6 +86,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    //method to check if the player is on the ground and sets the floor to his current floor
     void CheckGround()
     {
         RaycastHit groundHit;
@@ -85,6 +102,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    // If there is time, check if this collision can be placed in a script on Floor 3 itself
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.collider.CompareTag("Floor 3") && enteredFloor3 == false)
